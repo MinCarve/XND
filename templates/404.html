@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/css/output.css" rel="stylesheet">
+    <title>404</title>
+</head>
+<body class="bg-slate-900">
+    <div class="mt-20 flex min-h-screen items-center justify-center px-6 py-12 lg:px-8">
+        <main class="grid min-h-full place-items-center bg-slate-900 px-6 py-24 sm:py-32 lg:px-8">
+            <div class="text-center">
+            <p class="text-base font-semibold text-indigo-600">404</p>
+            <h1 class="mt-4 text-balance text-5xl font-semibold tracking-tight text-white sm:text-7xl">Page not found</h1>
+            <p class="mt-6 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">Sorry, we couldn’t find the page you’re looking for.</p>
+            <div class="mt-10 flex items-center justify-center gap-x-6">
+                <a href="{{ url_for('index') }}" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Go back home</a>
+                {% if current_user.is_anonymous %}
+                <a href="{{ url_for('signin') }}" class="text-sm font-semibold text-white">Log in <span aria-hidden="true">&rarr;</span></a>
+                {% endif %}
+            </div>
+            </div>
+        </main>    
+    </div>
+</body>
+</html>
