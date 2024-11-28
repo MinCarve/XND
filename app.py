@@ -64,6 +64,12 @@ def redirect_to_root():
 def not_found(e): 
   return render_template("404.html") 
 
+@app.errorhandler(400)
+def bad_request_error(e):
+    flash('Request has timed out', 'danger')
+    previous_page = request.referrer
+    return redirect(previous_page or "/")  # Redirect to the referrer or homepage
+
 @app.route("/logout", methods = ['GET', 'POST'])
 def logout():
     if (request.method == "POST") & (request.form.get('post_header') == 'log out'):
@@ -80,7 +86,13 @@ def account():
     else:
         return redirect(url_for('signin'))
 
-
+@app.route("/play")
+@login_required
+def play():
+    if current_user.is_authenticated:
+        return render_template("play.html", name=current_user.name)
+    else:
+        return redirect(url_for('signin'))
 
 @app.route("/signin", methods = ['GET', 'POST'])
 def signin():
@@ -90,8 +102,10 @@ def signin():
         user = User.query.filter_by(email = login_form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, login_form.password.data):
             login_user(user, remember = login_form.remember.data)
+            next_page = request.form.get('next_page')
 
-            return redirect(url_for('index'))
+
+            return redirect(next_page) if 'None' not in next_page else redirect(url_for('index'))
         else:
             flash('Wrong email or password', 'danger')
             return redirect(url_for('signin'))
@@ -124,7 +138,7 @@ def register():
                     email = register_form.email.data,
                     password = hashed_password)
         
-        reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{6,20}$"
+        reg = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,20}$"
      
         # compiling regex
         pwcheck = re.compile(reg)
