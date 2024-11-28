@@ -24,7 +24,8 @@
             <div>
                 <div class="flex items-center justify-between">
                     <label for="password" class="block text-base font-medium text-white">Password</label>
-                </div>
+                    <button id="message" class="text-white text-sm bg-red-500 ring-4 ring-red-500 ring-opacity-50">Make sure to use a strong password</button>          
+                    </div>
                 <div class="mt-2">
                     {{ register_form.password(class="block w-full rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm") }}
                 </div>
@@ -46,7 +47,7 @@
             <br />
             <div>
                 <div>
-                    {{ register_form.submit(class="flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-base font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600") }}
+                    {{ register_form.submit(style="cursor:pointer;", class="flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-base font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600") }}
                 </div>
         </form>
         <p class="mt-10 text-center font-semibold text-orange-700 hover:text-indigo-500">
@@ -60,4 +61,28 @@
         </p>
     </div>
 </div>
+<script>
+    const passwordField = document.getElementById('password');
+    const confirmPasswordField = document.getElementById('confirm_password');
+    const message = document.getElementById('message');
+
+    function checkPasswordsMatch() {
+        const password = passwordField.value;
+        const confirmPassword = confirmPasswordField.value;
+
+        if (confirmPassword === "") {
+            message.textContent = ""; // Clear message if confirm password is empty
+        } else if (password === confirmPassword) {
+            message.textContent = "Passwords match!";
+            message.className = "match";
+        } else {
+            message.textContent = "Passwords do not match.";
+            message.className = "no-match";
+        }
+    }
+
+    // Add event listeners for real-time checking
+    passwordField.addEventListener('input', checkPasswordsMatch);
+    confirmPasswordField.addEventListener('input', checkPasswordsMatch);
+</script>
 {% endblock %}
